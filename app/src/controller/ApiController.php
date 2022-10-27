@@ -10,7 +10,8 @@ use Moran\Model\CategoryModel;
 use Moran\Model\ExpenseModel;
 use Moran\View\ApiView;
 
-class ApiController {
+class ApiController
+{
 
     private ApiView $view;
     private CategoryModel $categoryModel;
@@ -23,9 +24,21 @@ class ApiController {
         $this->expenseModel = new ExpenseModel;
     }
 
-    public function getExpenses()
+    public function getExpenses($params = null)
     {
-        $expenses = (array) $this->expenseModel->getAll();
+        $expenses = $this->expenseModel->getAll();
         $this->view->response($expenses);
+    }
+
+    public function getExpense($params = null)
+    {
+        $id = $params['pathParams'][':id'];
+        $expense = $this->expenseModel->get($id);
+
+        if ($expense) {
+            $this->view->response($expense);
+        } else {
+            $this->view->response("El gasto con el id=$id no existe", 404);
+        }
     }
 }
