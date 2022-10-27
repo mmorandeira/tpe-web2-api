@@ -13,6 +13,6 @@ require_once('./controller/ApiController.php');
 $API_VERSION = 'v1';
 $router = new Router();
 
-$router->addRoute('gastos', 'GET', ApiController::class, 'getExpenses');
+$router->addRoute("api/$API_VERSION/gastos", 'GET', ApiController::class, 'getExpenses');
 
 $router->route($_GET['resource'], $_SERVER['REQUEST_METHOD']);
