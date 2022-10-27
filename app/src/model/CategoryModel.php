@@ -2,6 +2,9 @@
 
 namespace Moran\Model;
 
+require_once('./model/dto/Category.php');
+require_once('./model/hydrator/concrete/ClassMethodsHydrator.php');
+
 use \PDO;
 use \PDOException;
 use Moran\Model\DTO\Category;

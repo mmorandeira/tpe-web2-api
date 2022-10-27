@@ -2,6 +2,10 @@
 
 namespace Moran\Model;
 
+require_once('./model/dto/Expense.php');
+require_once('./model/hydrator/concrete/ClassMethodsHydrator.php');
+require_once('./model/hydrator/strategy/concrete/DateStrategy.php');
+
 use \PDO;
 use \PDOException;
 use Moran\Model\DTO\Expense;

@@ -2,7 +2,9 @@
 
 namespace Moran\Model\DTO;
 
-class Category 
+use \JsonSerializable;
+
+class Category implements JsonSerializable
 {
     private int $id;
     private string $name;
@@ -49,4 +51,13 @@ class Category
         $this->color = $color;
     }
 
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'color' => $this->color,
+        ];
+    }
 }

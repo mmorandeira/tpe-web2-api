@@ -2,9 +2,17 @@
 
 namespace Moran;
 
+use Moran\Controller\ApiController;
+
+error_reporting(E_ERROR | E_PARSE);
+
+require_once('./Router.php');
+require_once('./controller/ApiController.php');
+
+
 $API_VERSION = 'v1';
 $router = new Router();
 
-$router->addRoute('tasks', 'GET', 'APIController', )
+$router->addRoute('gastos', 'GET', ApiController::class, 'getExpenses');
 
-echo 'hola';
+$router->route($_GET['resource'], $_SERVER['REQUEST_METHOD']);

@@ -4,8 +4,9 @@ namespace Moran\Model\DTO;
 
 use \DateTime;
 use \ReflectionProperty;
+use \JsonSerializable;
 
-class Expense
+class Expense implements JsonSerializable
 {
     private int $id;
     private DateTime $date;
@@ -82,4 +83,16 @@ class Expense
         }
         return true;
     }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'date' => $this->date,
+            'productName' => $this->productName,
+            'cost' => $this->cost,
+            'categoryId' => $this->categoryId,
+        ];
+    }
+
 }

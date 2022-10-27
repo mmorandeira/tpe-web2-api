@@ -2,6 +2,8 @@
 
 namespace Moran\Model\Hydrator;
 
+require_once('./model/hydrator/HydratorInterface.php');
+
 use \ReflectionClass;
 use Moran\Model\Hydrator\Strategy\StrategyInterface;
 
