@@ -15,7 +15,7 @@ INSERT INTO app.expense (id, date, product_name, cost, category_id) VALUES
     (4, '2022-10-04', 'Internet', 5000.0, 2),
     (5, '2022-10-05', 'Alquiler', 30000.0, 2),
     (6, '2022-10-06', 'Abono celular', 1200.0, 2),
-    (7, '2022-10-07', 'Ibuprofeno', 321.5, 3),image.png
+    (7, '2022-10-07', 'Ibuprofeno', 321.5, 3),
     (8, '2022-10-08', 'Consulta odontologo', 5200.0, 3),
     (9, '2022-10-09', 'Masajes', 1000.0, 3),
     (10, '2022-10-10', 'Antares', 1423.75, 4),
