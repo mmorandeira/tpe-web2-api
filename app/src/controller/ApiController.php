@@ -41,4 +41,19 @@ class ApiController
             $this->view->response("El gasto con el id=$id no existe", 404);
         }
     }
+
+    public function deleteExpense($params)
+    {
+        $id = $params['pathParams'][':id'];
+
+        if ($this->expenseModel->get($id)) {
+            if ($this->expenseModel->delete($id)){
+                $this->view->response("El gasto con el id=$id se ha borrado con exito");
+            } else {
+                $this->view->response("El gasto con el id=$id no se pudo borrar", 500);
+            }
+        } else {
+            $this->view->response("El gasto con el id=$id no existe", 404);
+        }
+    }
 }
