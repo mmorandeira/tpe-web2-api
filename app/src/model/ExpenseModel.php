@@ -73,6 +73,8 @@ class ExpenseModel {
         $query = $this->db->prepare("INSERT INTO expense (id, date, product_name, cost, category_id) VALUES (NULL, ?, ?, ?, ?);");
         $arr = array($expense->getDate()->format('Y-m-d'), $expense->getProductName(), $expense->getCost(), $expense->getCategoryId());
         $query->execute($arr);
+
+        return $this->db->lastInsertId();
     }
 
     function delete(int $expenseId): bool

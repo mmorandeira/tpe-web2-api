@@ -76,7 +76,7 @@ class Expense implements JsonSerializable
         
         ];
         foreach($props as $prop => $value) {
-            $rp = new ReflectionProperty('Expense', $prop);
+            $rp = new ReflectionProperty(self::class, $prop);
             if($rp->isInitialized($this) != $value) {
                 return false;
             }
