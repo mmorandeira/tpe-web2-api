@@ -41,14 +41,21 @@ class ExpenseModel {
         return $result;
     }
 
-    function getAll($sortBy = null, $order = 'ASC')
+    function getAll($sortBy = null, $order = 'ASC', $page = null, $limit = null)
     {
-        $query = null;
-        if($sortBy){
-            $query = $this->db->prepare("SELECT * FROM expense ORDER BY $sortBy $order;");
-        } else {
-            $query = $this->db->prepare('SELECT * FROM expense;');
+        $query = "SELECT * FROM expense";
+        
+        if($page) {
+            $query .= " LIMIT $limit OFFSET $page";
         }
+
+        if($sortBy){
+            $query .= " ORDER BY $sortBy $order";
+        }
+        
+        $query .= ";";
+        
+        $query = $this->db->prepare($query);
         $query->execute();
         $expenseData = $query->fetchAll(PDO::FETCH_ASSOC);
 

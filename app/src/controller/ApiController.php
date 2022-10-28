@@ -94,6 +94,24 @@ class ApiController
         $sortBy = $params['queryParams']['sortBy'];
         $order = $params['queryParams']['order'];
 
+        $page = $params['queryParams']['page'];
+        $limit = $params['queryParams']['limit'];
+
+        if ((!isset($page) && isset($limit)) || (isset($page) && !isset($limit))) {
+            $this->view->response("Page y limit deben ser pasados", 400);
+            return;
+        }
+
+        if (isset($page) && !ctype_digit($page)) {
+            $this->view->response("Page tiene que ser un numero entero", 400);
+            return;
+        }
+
+        if (isset($limit) && !ctype_digit($limit)) {
+            $this->view->response("Limit tiene que ser un numero entero", 400);
+            return;
+        }
+
         if (isset($sortBy)) {
             if ($model->validField($sortBy)) {
                 if (isset($order) && !in_array(strtolower($order), ['asc', 'desc'])) {
@@ -101,14 +119,14 @@ class ApiController
                     return;
                 }
                 if (isset($order))
-                    $this->view->response($model->getAll($this->camelCaseToPascalCase($sortBy), strtoupper($order)));
+                    $this->view->response($model->getAll($this->camelCaseToPascalCase($sortBy), strtoupper($order), $page, $limit));
                 else
-                    $this->view->response($model->getAll($this->camelCaseToPascalCase($sortBy)));
+                    $this->view->response($model->getAll($this->camelCaseToPascalCase($sortBy), 'ASC', $page, $limit));
             } else {
                 $this->view->response("El campo $sortBy no existe.", 400);
             }
         } else {
-            $this->view->response($model->getAll());
+            $this->view->response($model->getAll(null, 'ASC', $page, $limit));
         }
     }
 }
