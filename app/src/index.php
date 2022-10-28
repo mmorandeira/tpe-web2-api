@@ -18,4 +18,4 @@ $router->addRoute("api/$API_VERSION/gastos/:id", 'GET', ApiController::class, 'g
 $router->addRoute("api/$API_VERSION/gastos/:id", 'DELETE', ApiController::class, 'deleteExpense');
 $router->addRoute("api/$API_VERSION/gastos", 'POST', ApiController::class, 'addExpense');
 
-$router->route($_GET['resource'], $_SERVER['REQUEST_METHOD']);
+$router->route($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

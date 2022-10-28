@@ -41,9 +41,14 @@ class ExpenseModel {
         return $result;
     }
 
-    function getAll()
+    function getAll($sortBy = null, $order = 'ASC')
     {
-        $query = $this->db->prepare('SELECT * FROM expense;');
+        $query = null;
+        if($sortBy){
+            $query = $this->db->prepare("SELECT * FROM expense ORDER BY $sortBy $order;");
+        } else {
+            $query = $this->db->prepare('SELECT * FROM expense;');
+        }
         $query->execute();
         $expenseData = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -92,5 +97,10 @@ class ExpenseModel {
     {
         $query = $this->db->prepare("UPDATE expense SET date = ?, product_name = ?, cost = ?, category_id = ? WHERE expense.id = ?;");
         $query->execute(array($expense->getDate()->format('Y-m-d'), $expense->getProductName(), $expense->getCost(), $expense->getCategoryId(), $expense->getId()));
+    }
+
+    function validField($field)
+    {
+        return in_array($field, ['id', 'date', 'productName', 'cost', 'categoryId']);
     }
 }

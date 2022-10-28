@@ -42,8 +42,7 @@ class ApiController
 
     public function getExpenses($params = null)
     {
-        $expenses = $this->expenseModel->getAll();
-        $this->view->response($expenses);
+        $this->getAllEntities($params, $this->expenseModel);
     }
 
     public function getExpense($params = null)
@@ -77,11 +76,39 @@ class ApiController
     {
         $expense = $this->hydrator->hydrate($this->getData(), new Expense());
 
-        if($expense->isFilled()) {
+        if ($expense->isFilled()) {
             $expense->setId($this->expenseModel->add($expense));
             $this->view->response($expense, 201);
         } else {
             $this->view->response("Complete los datos", 404);
+        }
+    }
+
+    private function camelCaseToPascalCase($string)
+    {
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
+    }
+
+    private function getAllEntities($params, $model)
+    {
+        $sortBy = $params['queryParams']['sortBy'];
+        $order = $params['queryParams']['order'];
+
+        if (isset($sortBy)) {
+            if ($model->validField($sortBy)) {
+                if (isset($order) && !in_array(strtolower($order), ['asc', 'desc'])) {
+                    $this->view->response("El order debe ser 'ASC' o 'DESC' (mayusculas o minusculas).", 400);
+                    return;
+                }
+                if (isset($order))
+                    $this->view->response($model->getAll($this->camelCaseToPascalCase($sortBy), strtoupper($order)));
+                else
+                    $this->view->response($model->getAll($this->camelCaseToPascalCase($sortBy)));
+            } else {
+                $this->view->response("El campo $sortBy no existe.", 400);
+            }
+        } else {
+            $this->view->response($model->getAll());
         }
     }
 }
