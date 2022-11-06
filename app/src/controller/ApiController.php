@@ -84,6 +84,24 @@ class ApiController
         }
     }
 
+    public function putExpense($params = null)
+    {
+        $expense = $this->hydrator->hydrate($this->getData(), new Expense());
+        $id = $params['pathParams'][':id'];
+
+        if ($expense->isFilled() && isset($id)) {
+            if($this->expenseModel->get($id)) {
+                $expense->setId($id);
+                $this->expenseModel->update($expense);
+                $this->view->response($expense, 201);
+            } else {
+                $this->view->response("El gasto con el id={$id} no existe", 404);
+            }
+        } else {
+            $this->view->response("Complete los datos", 404);
+        }
+    }
+
     private function camelCaseToPascalCase($string)
     {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
