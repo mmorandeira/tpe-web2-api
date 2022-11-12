@@ -115,20 +115,24 @@ class ApiController
         $page = $params['queryParams']['page'];
         $limit = $params['queryParams']['limit'];
 
+        $filter = $params['queryParams']['filter'];
+
         if ((!isset($page) && isset($limit)) || (isset($page) && !isset($limit))) {
             $this->view->response("Page y limit deben ser pasados", 400);
             return;
         }
 
-        if (isset($page) && !ctype_digit($page)) {
-            $this->view->response("Page tiene que ser un numero entero", 400);
+        if (isset($page) && !ctype_digit($page) && $page > 0) {
+            $this->view->response("Page tiene que ser un numero entero > 0", 400);
             return;
         }
 
-        if (isset($limit) && !ctype_digit($limit)) {
-            $this->view->response("Limit tiene que ser un numero entero", 400);
+        if (isset($limit) && !ctype_digit($limit) && $limit > 0) {
+            $this->view->response("Limit tiene que ser un numero entero > 0", 400);
             return;
         }
+
+        if(isset($page)) $page -= 1;
 
         if (isset($sortBy)) {
             if ($model->validField($sortBy)) {
@@ -137,14 +141,14 @@ class ApiController
                     return;
                 }
                 if (isset($order))
-                    $this->view->response($model->getAll($this->camelCaseToPascalCase($sortBy), strtoupper($order), $page, $limit));
+                    $this->view->response($model->getAll($this->camelCaseToPascalCase($sortBy), strtoupper($order), $page, $limit, $filter));
                 else
-                    $this->view->response($model->getAll($this->camelCaseToPascalCase($sortBy), 'ASC', $page, $limit));
+                    $this->view->response($model->getAll($this->camelCaseToPascalCase($sortBy), 'ASC', $page, $limit, $filter));
             } else {
                 $this->view->response("El campo $sortBy no existe.", 400);
             }
         } else {
-            $this->view->response($model->getAll(null, 'ASC', $page, $limit));
+            $this->view->response($model->getAll(null, 'ASC', $page, $limit, $filter));
         }
     }
 }

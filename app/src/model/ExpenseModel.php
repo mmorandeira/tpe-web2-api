@@ -41,21 +41,28 @@ class ExpenseModel {
         return $result;
     }
 
-    function getAll($sortBy = null, $order = 'ASC', $page = null, $limit = null)
+    function getAll($sortBy = null, $order = 'ASC', $page = null, $limit = null, $filter = null)
     {
         $query = "SELECT * FROM expense";
+
+        if(isset($filter)){
+            $query .= " WHERE product_name LIKE :filter";
+        }
         
-        if($page) {
+        if(isset($page)) {
             $query .= " LIMIT $limit OFFSET $page";
         }
 
-        if($sortBy){
+        if(isset($sortBy)){
             $query .= " ORDER BY $sortBy $order";
         }
         
         $query .= ";";
         
         $query = $this->db->prepare($query);
+        if($filter){
+            $query->bindValue(':filter', "%$filter%", PDO::PARAM_STR);
+        }
         $query->execute();
         $expenseData = $query->fetchAll(PDO::FETCH_ASSOC);
 
