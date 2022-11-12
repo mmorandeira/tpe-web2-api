@@ -2,25 +2,24 @@
 
 namespace Moran\Controller;
 
-require_once('./model/CategoryModel.php');
 require_once('./model/ExpenseModel.php');
 require_once('./model/hydrator/concrete/ClassMethodsHydrator.php');
 require_once('./model/hydrator/strategy/concrete/DateStrategy.php');
 require_once('./view/ApiView.php');
+require_once('./helpers/ApiAuthHelper.php');
 
 
-use Moran\Model\CategoryModel;
 use Moran\Model\DTO\Expense;
 use Moran\Model\ExpenseModel;
 use Moran\View\ApiView;
 use Moran\Model\Hydrator\ClassMethodsHydrator;
 use Moran\Model\Hydrator\Strategy\DateStrategy;
+use Moran\Helpers\ApiAuthHelper;
 
 class ApiController
 {
 
     private ApiView $view;
-    private CategoryModel $categoryModel;
     private ExpenseModel $expenseModel;
     private ClassMethodsHydrator $hydrator;
     private $data;
@@ -28,11 +27,11 @@ class ApiController
     public function __construct()
     {
         $this->view = new ApiView();
-        $this->categoryModel = new CategoryModel();
         $this->expenseModel = new ExpenseModel();
         $this->hydrator = new ClassMethodsHydrator();
         $this->hydrator->addStrategy('date', new DateStrategy());
         $this->data = file_get_contents("php://input");
+        $this->apiAuthHelper = new ApiAuthHelper();
     }
 
     private function getData()
@@ -61,6 +60,11 @@ class ApiController
     {
         $id = $params['pathParams'][':id'];
 
+        if (!$this->apiAuthHelper->isLoggedIn()) {
+            $this->view->response("No estas logeado", 401);
+            return;
+        }
+
         if ($this->expenseModel->get($id)) {
             if ($this->expenseModel->delete($id)) {
                 $this->view->response("El gasto con el id=$id se ha borrado con exito");
@@ -76,6 +80,11 @@ class ApiController
     {
         $expense = $this->hydrator->hydrate($this->getData(), new Expense());
 
+        if (!$this->apiAuthHelper->isLoggedIn()) {
+            $this->view->response("No estas logeado", 401);
+            return;
+        }
+
         if ($expense->isFilled()) {
             $expense->setId($this->expenseModel->add($expense));
             $this->view->response($expense, 201);
@@ -89,8 +98,13 @@ class ApiController
         $expense = $this->hydrator->hydrate($this->getData(), new Expense());
         $id = $params['pathParams'][':id'];
 
+        if (!$this->apiAuthHelper->isLoggedIn()) {
+            $this->view->response("No estas logeado", 401);
+            return;
+        }
+
         if ($expense->isFilled() && isset($id)) {
-            if($this->expenseModel->get($id)) {
+            if ($this->expenseModel->get($id)) {
                 $expense->setId($id);
                 $this->expenseModel->update($expense);
                 $this->view->response($expense, 201);
@@ -132,7 +146,7 @@ class ApiController
             return;
         }
 
-        if(isset($page)) $page -= 1;
+        if (isset($page)) $page -= 1;
 
         if (isset($sortBy)) {
             if ($model->validField($sortBy)) {
