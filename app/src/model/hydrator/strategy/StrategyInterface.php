@@ -2,7 +2,7 @@
 
 namespace Moran\Model\Hydrator\Strategy;
 
-interface StrategyInterface 
+interface StrategyInterface
 {
     public function hydrate($value);
 }

@@ -12,7 +12,7 @@ use Moran\Model\Hydrator\ClassMethodsHydrator;
 
 class CategoryModel
 {
-    
+
     private $db;
     private $hydrator;
 
@@ -32,7 +32,7 @@ class CategoryModel
         $expenseData = $query->fetchAll(PDO::FETCH_ASSOC);
 
         $result = array();
-        foreach($expenseData as $expense) {
+        foreach ($expenseData as $expense) {
             $result[] = $this->hydrator->hydrate($expense, new Category());
         }
 
@@ -71,7 +71,7 @@ class CategoryModel
         } catch (PDOException $e) {
             return false;
         }
-        return true;    
+        return true;
     }
 
     function update(Category $category)

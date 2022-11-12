@@ -13,7 +13,7 @@ class Expense implements JsonSerializable
     private string $productName;
     private float $cost;
     private int $categoryId;
-    
+
     public function getId(): int
     {
         return $this->id;
@@ -72,12 +72,12 @@ class Expense implements JsonSerializable
             'date' => true,
             'productName' => true,
             'cost' => true,
-            'categoryId' => true 
-        
+            'categoryId' => true
+
         ];
-        foreach($props as $prop => $value) {
+        foreach ($props as $prop => $value) {
             $rp = new ReflectionProperty(self::class, $prop);
-            if($rp->isInitialized($this) != $value) {
+            if ($rp->isInitialized($this) != $value) {
                 return false;
             }
         }
@@ -94,5 +94,4 @@ class Expense implements JsonSerializable
             'categoryId' => $this->categoryId,
         ];
     }
-
 }

@@ -27,7 +27,7 @@ class ClassMethodsHydrator implements HydratorInterface
 
             $methodName = 'set';
             $fieldWords = explode('_', $key);
-            foreach($fieldWords as $word) {
+            foreach ($fieldWords as $word) {
                 $methodName .= ucfirst($word);
             }
 
@@ -46,9 +46,9 @@ class ClassMethodsHydrator implements HydratorInterface
 
     public function addStrategy(string $name, StrategyInterface $strategy): void
     {
-        $this->strategies[$name] = $strategy; 
+        $this->strategies[$name] = $strategy;
     }
-    
+
     public function hasStrategy(string $name): bool
     {
         return array_key_exists($name, $this->strategies);

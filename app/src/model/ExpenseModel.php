@@ -12,7 +12,8 @@ use Moran\Model\DTO\Expense;
 use Moran\Model\Hydrator\ClassMethodsHydrator;
 use Moran\Model\Hydrator\Strategy\DateStrategy;
 
-class ExpenseModel {
+class ExpenseModel
+{
 
     private $db;
     private $hydrator;
@@ -34,7 +35,7 @@ class ExpenseModel {
         $expenseData = $query->fetchAll(PDO::FETCH_ASSOC);
 
         $result = array();
-        foreach($expenseData as $expense) {
+        foreach ($expenseData as $expense) {
             $result[] = $this->hydrator->hydrate($expense, new Expense());
         }
 
@@ -45,29 +46,29 @@ class ExpenseModel {
     {
         $query = "SELECT * FROM expense";
 
-        if(isset($filter)){
+        if (isset($filter)) {
             $query .= " WHERE product_name LIKE :filter";
         }
-        
-        if(isset($page)) {
+
+        if (isset($page)) {
             $query .= " LIMIT $limit OFFSET $page";
         }
 
-        if(isset($sortBy)){
+        if (isset($sortBy)) {
             $query .= " ORDER BY $sortBy $order";
         }
-        
+
         $query .= ";";
-        
+
         $query = $this->db->prepare($query);
-        if($filter){
+        if ($filter) {
             $query->bindValue(':filter', "%$filter%", PDO::PARAM_STR);
         }
         $query->execute();
         $expenseData = $query->fetchAll(PDO::FETCH_ASSOC);
 
         $result = array();
-        foreach($expenseData as $expense) {
+        foreach ($expenseData as $expense) {
             $result[] = $this->hydrator->hydrate($expense, new Expense());
         }
 
@@ -81,7 +82,7 @@ class ExpenseModel {
         $expenseData = $query->fetch(PDO::FETCH_ASSOC);
 
         $expense = null;
-        if($query->rowCount() > 0)
+        if ($query->rowCount() > 0)
             $expense = $this->hydrator->hydrate($expenseData, new Expense());
 
         return $expense;
@@ -104,7 +105,7 @@ class ExpenseModel {
         } catch (PDOException $e) {
             return false;
         }
-        return true;        
+        return true;
     }
 
     function update(Expense $expense)
