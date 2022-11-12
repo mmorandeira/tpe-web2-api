@@ -31,6 +31,17 @@ docker exec -i tpe-web2-db mysql < ./db/hydrate-tables.sql
 
 Los endpoints van estar todos con el prefijo -> http://localhost/api/v1
 
+### POST /authorization
+
+Endopoint para obtner el Bearer token. Se requiere basic auth.El user seria el mail. Algunos de ejemplo son: user1@mail.com, user2@mail.com o user3@mail.com, las contraseñas de todos estos es admin.
+
+Una respuesta de ejemplo seria:
+```
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6Ik5pY28iLCJleHAiOjE2NjgyODk2OTJ9.9WbWW5FB-IxiyIp_ZI_pw2EBnyWXDaYkgaMb4lpTr1Y"
+}
+```
+
 ### GET /gastos
 
 Endpoint para obtener todos los gastos, el cual puede recibir los siguientes queryParams.
@@ -106,7 +117,7 @@ Ejemplo de respuesta al GET /gastos/1:
 
 ### POST /gastos
 
-Endpoint para la creacion de un nuevo gasto, se debe pasar en el body el siguiente JSON:
+Endpoint para la creacion de un nuevo gasto. Requiere autenticacion con Bearer token. Se debe pasar en el body el siguiente JSON:
 ```
 {
     "date": "13/03/2022"
@@ -132,7 +143,9 @@ La response seria el mismo objeto con su id
 
 ### PUT /gastos/:id
 
-Endpoint para la modificacion de un gasto existente, `:id` es un pathParam. En el body se debe pasar todos los campos exceptuando el id (ya que va especificado en el pathParam). Por ejemplo:
+Endpoint para la modificacion de un gasto existente, `:id` es un pathParam. En el body se debe pasar todos los campos exceptuando el id (ya que va especificado en el pathParam). Requiere autenticacion con Bearer token.
+
+Por ejemplo:
 PUT /gastos/1
 ```
 {
@@ -160,7 +173,7 @@ obteniendo de respuesta
 
 ### DELETE /gastos/:id
 
-Endoint para la eliminacion de un gasto existente, `:id` es un pathParam.
+Endoint para la eliminacion de un gasto existente, `:id` es un pathParam. Requiere autenticacion con Bearer token
 
 Ejemplo de respuesta de una eliminacion exitosa:
 ```
