@@ -66,8 +66,8 @@ class ApiAuthController
                 'typ' => 'JWT'
             );
             $payload = array(
-                'id' => 1,
-                'name' => "Nico",
+                'id' => $user->getId(),
+                'name' => $user->getEmail(),
                 'exp' => time() + 3600
             );
             $header = \Moran\Utils\base64url_encode(json_encode($header));
