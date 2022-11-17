@@ -28,7 +28,8 @@ docker exec -i tpe-web2-db mysql < ./db/hydrate-tables.sql
 ```
 
 ## Endpoints
-Ver la documentacion de postman [aca](https://documenter.getpostman.com/view/15667153/2s8YmNRi8C#68cac2d9-7703-4df7-9b03-00df37ff9a26).
+Ver la documentacion de postman [aca](https://documenter.getpostman.com/view/15667153/2s8YmNRi8C).
+
 Los endpoints van estar todos con el prefijo -> http://localhost/api/v1
 
 ### POST /authorization
